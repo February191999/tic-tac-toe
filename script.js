@@ -73,7 +73,7 @@ function GameController(
 
     const playRound = (row, column) => {
         console.log(
-            `${getActivePlayer().name} marked row and column: ${row} / ${column}`
+            `${getActivePlayer().name} marked row and column: ${row} and ${column}`
         );
         board.markSquare(row, column, getActivePlayer().token); // mark cell with the selected row and column with the active player's mark
 
@@ -103,12 +103,13 @@ function ScreenController() {
 
         playerTurnDiv.textContent = `${activePlayer.name}'s turn` // Displays current player's turn
 
-        board.forEach(row => {
-            row.forEach((cell, index) => {
+        board.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
                 const cellButton = document.createElement("button");
                 cellButton.classList.add("cell");
-                cellButton.dataset.column = index
-                cellButton.textContent = cell.getValue();
+                cellButton.dataset.row = rowIndex;
+                cellButton.dataset.column = colIndex;
+                cellButton.textContent = cell.getValue() === 0 ? "" : cell.getValue(); // Make cell show up as blank cells if they are empty
                 boardDiv.appendChild(cellButton);
             })
         })
@@ -116,9 +117,10 @@ function ScreenController() {
 
     function clickHandlerBoard(e) {
         const selectedColumn = e.target.dataset.column;
-        if (!selectedColumn) return;
+        const selectedRow = e.target.dataset.row;
+        if (selectedColumn === undefined || selectedRow === undefined) return;
 
-        game.playRound(selectedColumn);
+        game.playRound(parseInt(selectedColumn), parseInt(selectedRow));
         updateScreen();
     }
     boardDiv.addEventListener("click", clickHandlerBoard);
