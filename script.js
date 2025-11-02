@@ -51,11 +51,11 @@ function GameController(
     const players = [
         {
             name: playerOneName,
-            token: 1
+            token: "O"
         },
         {
             name: playerTwoName,
-            token: 2
+            token: "X"
         }
     ];
 
