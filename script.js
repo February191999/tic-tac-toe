@@ -85,8 +85,45 @@ function GameController(
 
     return {
         playRound,
-        getActivePlayer
+        getActivePlayer,
+        getBoard: board.getBoard
     };
 }
 
-const game = GameController();
+function ScreenController() {
+    const game = GameController();
+    const playerTurnDiv = document.querySelector(".turn");
+    const boardDiv = document.querySelector(".board");
+
+    const updateScreen = () => {
+        boardDiv.textContent = ""; // Empties board
+
+        const board = game.getBoard(); // Gets the newest version of the board and player turn from game controller
+        const activePlayer = game.getActivePlayer(); 
+
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn` // Displays current player's turn
+
+        board.forEach(row => {
+            row.forEach((cell, index) => {
+                const cellButton = document.createElement("button");
+                cellButton.classList.add("cell");
+                cellButton.dataset.column = index
+                cellButton.textContent = cell.getValue();
+                boardDiv.appendChild(cellButton);
+            })
+        })
+    }
+
+    function clickHandlerBoard(e) {
+        const selectedColumn = e.target.dataset.column;
+        if (!selectedColumn) return;
+
+        game.playRound(selectedColumn);
+        updateScreen();
+    }
+    boardDiv.addEventListener("click", clickHandlerBoard);
+
+    updateScreen();
+}
+
+ScreenController();
