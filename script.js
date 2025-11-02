@@ -28,7 +28,7 @@ function Gameboard () {
     const getBoard = () => board;
 
     const markSquare = (row, column, player) => {
-        const square = board[row][column] // Selects square to occupy
+        const square = board[column][row] // Selects square to occupy
         if (square.getValue() !== 0) return false; //Checks if square is occupied and return false if occupied
         square.markCell(player); // Add player mark if not occupied
         return true;
